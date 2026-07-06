@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TinderDog - Inicio</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fff7f2, #ffe7db);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .phone {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    .header {
+      padding: 18px 20px 8px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 22px;
+      color: #ff6b6b;
+      position: relative;
+    }
+    .session-button {
+      position: absolute;
+      top: 18px;
+      right: 16px;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #ff6b6b;
+      color: white;
+    }
+    .card {
+      margin: 10px 16px 16px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffb26b, #ff6b6b);
+      height: 470px;
+      position: relative;
+      box-shadow: inset 0 -80px 100px rgba(0,0,0,0.35);
+    }
+    .photo {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      color: white;
+      background: #f8efe8;
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-track {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      transition: transform 0.3s ease;
+      z-index: 1;
+    }
+    .photo-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffe4c4, #ff8d5a);
+      overflow: hidden;
+    }
+    .photo-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      background: #fff;
+      border: 3px solid rgba(255,255,255,0.9);
+      position: relative;
+      z-index: 2;
+    }
+    .photo-indicators {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 4;
+    }
+    .photo-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      background: rgba(255,255,255,0.75);
+      color: #ff6b6b;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .photo-nav.prev { left: 10px; }
+    .photo-nav.next { right: 10px; }
+    .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+    }
+    .indicator.active {
+      background: white;
+    }
+    .info {
+      position: relative;
+      z-index: 3;
+      background: rgba(0,0,0,0.36);
+      backdrop-filter: blur(4px);
+      border-radius: 18px;
+      padding: 12px 14px;
+      max-width: 100%;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .info h1 { margin: 0 0 6px; font-size: 28px; }
+    .info p { margin: 0; font-size: 16px; line-height: 1.4; }
+    .actions {
+      display: flex;
+      gap: 12px;
+      padding: 0 16px 20px;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 12px 16px;
+      border-top: 1px solid #f5e0db;
+      background: white;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #8a6c6c;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff3f2;
+      color: #ff6b6b;
+      font-size: 18px;
+    }
+    .nav-item.active {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+    .nav-item.active .nav-icon {
+      background: #ff6b6b;
+      color: white;
+    }
+    button {
+      flex: 1;
+      border: none;
+      border-radius: 999px;
+      padding: 13px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+    .pass {
+      background: linear-gradient(135deg, #ffd6d6, #ff9aa2);
+      color: #a33a3a;
+      box-shadow: 0 8px 18px rgba(255, 107, 107, 0.25);
+    }
+    .like {
+      background: linear-gradient(135deg, #dff8e8, #8ee0a1);
+      color: #2f6b3f;
+      box-shadow: 0 8px 18px rgba(76, 175, 80, 0.22);
+    }
+    .badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(255,255,255,0.9);
+      color: #ff6b6b;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .match-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .match-modal.open {
+      display: flex;
+    }
+    .match-card {
+      width: 100%;
+      max-width: 520px;
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      text-align: center;
+    }
+    .match-card h2 {
+      margin: 20px 16px 4px;
+      font-size: 26px;
+      color: #ff6b6b;
+    }
+    .match-card p {
+      margin: 0 16px 16px;
+      color: #555;
+      font-size: 16px;
+    }
+    .match-card video {
+      width: 100%;
+      display: block;
+      background: black;
+    }
+    .match-card button {
+      width: calc(100% - 32px);
+      margin: 16px;
+      padding: 14px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="match-modal" id="matchModal">
+  <div class="match-card">
+    <h2>¡Es un match!</h2>
+    <p>¡Tu perro se ha gustado con <span id="matchName">otro perro</span>!</p>
+    <video id="matchVideo" controls autoplay playsinline preload="auto">
+      <source src="/perrowao.mp4" type="video/mp4" />
+      Tu navegador no soporta video.
+    </video>
+    <button type="button" onclick="closeMatchModal()">Cerrar</button>
+  </div>
+</div>
+  <div class="phone">
+    <div class="header">
+      MyDogCrush
+      <button class="session-button" id="sessionButton" onclick="toggleSession()">Iniciar sesión</button>
+    </div>
+    <div class="card">
+      <div class="badge">Nuevo</div>
+      <div class="photo" id="photoContainer">
+        <button class="photo-nav prev" type="button" onclick="goToPrevPhoto()">‹</button>
+        <button class="photo-nav next" type="button" onclick="goToNextPhoto()">›</button>
+        <div class="photo-track" id="photoTrack"></div>
+        <div class="photo-indicators" id="photoIndicators"></div>
+        <div class="info" style="position:relative;z-index:2;">
+          <h1 id="name">Milo, 3</h1>
+          <p id="bio">Amigable, juguetón y listo para pasear.</p>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="pass" onclick="nextProfile('pass')">Pasar</button>
+      <button class="like" onclick="nextProfile('like')">Me gusta</button>
+    </div>
+
+    <div class="bottom-nav">
+      <a class="nav-item" href="photos.html">
+        <div class="nav-icon">👤</div>
+        <span>Perfil</span>
+      </a>
+      <a class="nav-item" href="chats.html">
+        <div class="nav-icon">💌</div>
+        <span>Chats</span>
+      </a>
+      <a class="nav-item active" href="main.html">
+        <div class="nav-icon">💬</div>
+        <span>Ver perfiles</span>
+      </a>
+      <a class="nav-item" href="donate.html">
+        <div class="nav-icon">❤️</div>
+        <span>Donar</span>
+      </a>
+      <a class="nav-item" href="account.html">
+        <div class="nav-icon">⚙️</div>
+        <span>Cuenta</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    let profiles = [];
+    let current = 0;
+    let photoIndex = 0;
+    let touchStartX = 0;
+    let isDragging = false;
+
+    function loadProfilesFromStorage() {
+      try {
+        return JSON.parse(localStorage.getItem('mydogcrushProfiles') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveProfilesToStorage(list) {
+      localStorage.setItem('mydogcrushProfiles', JSON.stringify(list));
+    }
+
+    function getCurrentUserIdentity() {
+      const account = JSON.parse(localStorage.getItem('mydogcrushAccount') || '{}');
+      const ownerName = (account.ownerName || '').trim().toLowerCase();
+      const email = (account.email || '').trim().toLowerCase();
+      const localProfile = (loadProfilesFromStorage()[0] || {});
+      const localOwner = (localProfile.ownerName || '').trim().toLowerCase();
+      const localDog = (localProfile.dogName || '').trim().toLowerCase();
+      return { ownerName, email, localOwner, localDog };
+    }
+
+    function isCurrentUserProfile(profile) {
+      const identity = getCurrentUserIdentity();
+      const profileOwner = (profile.ownerName || '').trim().toLowerCase();
+      const profileDog = (profile.dogName || '').trim().toLowerCase();
+      const profileEmail = (profile.email || '').trim().toLowerCase();
+
+      if (identity.email && profileEmail && identity.email === profileEmail) return true;
+      if (identity.ownerName && profileOwner && identity.ownerName === profileOwner) return true;
+      if (identity.localOwner && profileOwner && identity.localOwner === profileOwner) return true;
+      if (identity.localDog && profileDog && identity.localDog === profileDog) return true;
+      return false;
+    }
+
+    function mergeProfiles(serverProfiles) {
+      const seen = new Set();
+      return (serverProfiles || []).filter(profile => {
+        const key = profile.id || `${profile.ownerName || ''}-${profile.dogName || ''}-${profile.bio || ''}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+
+        if (profile.isDemo === true) return false;
+        if (typeof profile.email === 'string' && profile.email.includes('@tinderdog.test')) return false;
+        if (isCurrentUserProfile(profile)) return false;
+
+        return true;
+      });
+    }
+
+    function getPhotoUrl(photo) {
+      if (!photo) return 'http://localhost:3000/dogcrush.png';
+      if (photo.startsWith('data:') || photo.startsWith('http://') || photo.startsWith('https://')) return photo;
+      return `http://localhost:3000${photo}`;
+    }
+
+    function renderPhotos(p) {
+      const track = document.getElementById('photoTrack');
+      const indicators = document.getElementById('photoIndicators');
+      const photos = (p && p.photos && p.photos.length) ? p.photos.filter(Boolean) : [];
+      if (!photos.length) {
+        track.innerHTML = '<div class="photo-slide"><img src="dogcrush.png" alt="foto perro" /></div>';
+        indicators.innerHTML = '';
+        return;
+      }
+
+      const slides = photos.map((photo, index) => `
+        <div class="photo-slide">
+          <img src="${getPhotoUrl(photo)}" alt="foto ${index + 1}" onerror="this.onerror=null;this.src='dogcrush.png';" />
+        </div>
+      `).join('');
+
+      track.innerHTML = slides;
+      indicators.innerHTML = photos.map((_, index) => `<span class="indicator ${index === 0 ? 'active' : ''}"></span>`).join('');
+      photoIndex = 0;
+      track.style.transform = 'translateX(0px)';
+    }
+
+    function updatePhotoPosition() {
+      const track = document.getElementById('photoTrack');
+      const indicators = document.getElementById('photoIndicators');
+      const p = profiles[current];
+      const photos = (p && p.photos && p.photos.length) ? p.photos.filter(Boolean) : [];
+      if (!photos.length) return;
+      track.style.transform = `translateX(-${photoIndex * 100}%)`;
+      Array.from(indicators.children).forEach((dot, index) => {
+        dot.classList.toggle('active', index === photoIndex);
+      });
+    }
+
+    function showProfile(index) {
+      if (!profiles || profiles.length === 0) {
+        document.getElementById('name').textContent = 'Sin perfiles';
+        document.getElementById('bio').textContent = 'Sé el primero en crear un perfil.';
+        document.getElementById('photoTrack').innerHTML = '<div class="photo-slide"><img src="dogcrush.png" alt="foto perro" /></div>';
+        document.getElementById('photoIndicators').innerHTML = '';
+        return;
+      }
+      current = (index + profiles.length) % profiles.length;
+      const p = profiles[current];
+      const displayName = p.dogName ? `${p.dogName}` : 'Sin nombre';
+      const ownerName = p.ownerName ? `Dueño: ${p.ownerName}` : '';
+      const ageText = p.age ? `Edad: ${p.age}` : '';
+      const bioText = p.bio ? p.bio : 'Sin descripción.';
+      document.getElementById('name').textContent = displayName;
+      document.getElementById('bio').textContent = [ownerName, ageText, bioText].filter(Boolean).join(' • ');
+      renderPhotos(p);
+    }
+
+    function getCurrentUserKey() {
+      const account = JSON.parse(localStorage.getItem('mydogcrushAccount') || '{}');
+      const localProfile = (loadProfilesFromStorage()[0] || {});
+      const email = (account.email || '').trim().toLowerCase();
+      const owner = (account.ownerName || localProfile.ownerName || '').trim().toLowerCase();
+      const dog = (localProfile.dogName || '').trim().toLowerCase();
+      if (email) return email;
+      if (owner && dog) return `${owner}:${dog}`;
+      if (owner) return owner;
+      return '';
+    }
+
+    function getCurrentUserProfile() {
+      const localProfile = (loadProfilesFromStorage()[0] || null);
+      return localProfile;
+    }
+
+    async function ackPendingMatch(profileId, matchProfileId) {
+      try {
+        await fetch(`${API_BASE}/matches/ack`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profileId, matchProfileId }),
+        });
+      } catch (err) {
+        console.error('Error acking pending match:', err);
+      }
+    }
+
+    async function checkPendingMatches() {
+      const identity = getCurrentUserIdentity();
+      if (!identity.email && !identity.localOwner && !identity.localDog) return;
+
+      const params = new URLSearchParams();
+      if (identity.email) params.set('email', identity.email);
+      if (identity.localOwner) params.set('ownerName', identity.localOwner);
+      if (identity.localDog) params.set('dogName', identity.localDog);
+
+      try {
+        const res = await fetch(`${API_BASE}/pending-matches?${params.toString()}`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.pendingMatches) && data.pendingMatches.length > 0) {
+          const matchProfile = data.pendingMatches[0];
+          data.pendingMatches.forEach(profile => saveMatchChatEntry(profile));
+          if (data.currentProfile && matchProfile) {
+            await ackPendingMatch(data.currentProfile.id, matchProfile.id);
+            showPendingMatchVideo(matchProfile);
+          }
+        }
+      } catch (err) {
+        console.error('Error verificando matches pendientes:', err);
+      }
+    }
+
+    function saveMatchChatEntry(profile) {
+      if (!profile || !profile.id) return;
+      const chats = JSON.parse(localStorage.getItem('mydogcrushChats') || '[]');
+      const existing = chats.find(chat => String(chat.id) === String(profile.id));
+      const entry = {
+        id: profile.id,
+        dogName: profile.dogName || '',
+        ownerName: profile.ownerName || '',
+        lastMessage: '¡Es un match! Inicia la conversación.',
+        messages: existing ? existing.messages || [] : [],
+        timestamp: Date.now(),
+      };
+      if (existing) {
+        existing.dogName = entry.dogName;
+        existing.ownerName = entry.ownerName;
+        existing.lastMessage = entry.lastMessage;
+        existing.timestamp = entry.timestamp;
+      } else {
+        chats.unshift(entry);
+      }
+      localStorage.setItem('mydogcrushChats', JSON.stringify(chats));
+      localStorage.setItem('mydogcrushPendingChatId', String(profile.id));
+    }
+
+    function redirectToChatAfterVideo() {
+      const pendingChatId = localStorage.getItem('mydogcrushPendingChatId');
+      if (pendingChatId) {
+        window.location.href = `chats.html?chatId=${encodeURIComponent(pendingChatId)}`;
+      } else {
+        window.location.href = 'chats.html';
+      }
+    }
+
+    function showPendingMatchVideo(matchProfile) {
+      saveMatchChatEntry(matchProfile);
+      prepareMatchVideo();
+      const matchName = matchProfile.dogName || matchProfile.ownerName || 'tu crush';
+      showMatchModal(matchName);
+    }
+
+    async function likeCurrentProfile() {
+      const currentProfile = profiles[current];
+      if (!currentProfile) return false;
+      const currentKey = getCurrentUserKey();
+      if (!currentKey) {
+        alert('Guarda tu perfil antes de darle me gusta.');
+        return false;
+      }
+
+      const likedProfiles = JSON.parse(localStorage.getItem('mydogcrushLikes') || '[]');
+      if (!likedProfiles.includes(currentProfile.id)) {
+        likedProfiles.push(currentProfile.id);
+        localStorage.setItem('mydogcrushLikes', JSON.stringify(likedProfiles));
+      }
+
+      const account = JSON.parse(localStorage.getItem('mydogcrushAccount') || '{}');
+      const localProfile = getCurrentUserProfile() || {};
+      const payload = {
+        likedProfileId: currentProfile.id,
+        likerEmail: account.email || '',
+        likerName: currentKey,
+        likerOwnerName: account.ownerName || localProfile.ownerName || '',
+        likerDogName: localProfile.dogName || '',
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/likes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (data.success && data.match) {
+          saveMatchChatEntry(currentProfile);
+          const matchName = currentProfile.dogName || currentProfile.ownerName || 'tu crush';
+          showMatchModal(matchName);
+          const localProfile = getCurrentUserProfile();
+          if (localProfile && localProfile.id) {
+            await ackPendingMatch(localProfile.id, currentProfile.id);
+          }
+          return true;
+        }
+      } catch (err) {
+        console.error('Error enviando like:', err);
+      }
+      return false;
+    }
+
+    function prepareMatchVideo() {
+      const video = document.getElementById('matchVideo');
+      if (!video) return;
+      video.muted = false;
+      video.volume = 1.0;
+      video.currentTime = 0;
+      video.play().catch(() => {
+        // No bloquear la experiencia si el navegador no permite autoplay con sonido.
+      });
+    }
+
+    function showMatchModal(matchName) {
+      document.getElementById('matchName').textContent = matchName;
+      const modal = document.getElementById('matchModal');
+      modal.classList.add('open');
+      attachMatchVideoEnded();
+    }
+
+    function attachMatchVideoEnded() {
+      const video = document.getElementById('matchVideo');
+      if (!video) return;
+      if (video._matchEndedAttached) return;
+      video._matchEndedAttached = true;
+      video.addEventListener('ended', () => {
+        const pendingChatId = localStorage.getItem('mydogcrushPendingChatId');
+        if (pendingChatId) {
+          redirectToChatAfterVideo();
+        }
+      });
+    }
+
+    function hideMatchVideo() {
+      const video = document.getElementById('matchVideo');
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    }
+
+    function closeMatchModal() {
+      const modal = document.getElementById('matchModal');
+      modal.classList.remove('open');
+      hideMatchVideo();
+      redirectToChatAfterVideo();
+    }
+
+    async function nextProfile(action) {
+      if (!profiles || profiles.length === 0) return;
+      if (action === 'like') {
+        prepareMatchVideo();
+        const isMatch = await likeCurrentProfile();
+        if (!isMatch) {
+          hideMatchVideo();
+        }
+      }
+      if (profiles.length === 1) {
+        showProfile(0);
+        return;
+      }
+      current = (current + 1) % profiles.length;
+      showProfile(current);
+    }
+
+    function goToNextPhoto() {
+      const p = profiles[current];
+      const photos = (p && p.photos && p.photos.length) ? p.photos.filter(Boolean) : [];
+      if (!photos.length) return;
+      photoIndex = (photoIndex + 1) % photos.length;
+      updatePhotoPosition();
+    }
+
+    function goToPrevPhoto() {
+      const p = profiles[current];
+      const photos = (p && p.photos && p.photos.length) ? p.photos.filter(Boolean) : [];
+      if (!photos.length) return;
+      photoIndex = (photoIndex - 1 + photos.length) % photos.length;
+      updatePhotoPosition();
+    }
+
+    const photoContainer = document.getElementById('photoContainer');
+
+    photoContainer.addEventListener('touchstart', (event) => {
+      touchStartX = event.touches[0].clientX;
+      isDragging = true;
+    }, { passive: true });
+
+    photoContainer.addEventListener('touchmove', (event) => {
+      if (!isDragging) return;
+      const deltaX = event.touches[0].clientX - touchStartX;
+      if (Math.abs(deltaX) > 30) {
+        event.preventDefault();
+      }
+    }, { passive: false });
+
+    photoContainer.addEventListener('touchend', (event) => {
+      if (!isDragging) return;
+      const deltaX = event.changedTouches[0].clientX - touchStartX;
+      if (deltaX < -40) goToNextPhoto();
+      if (deltaX > 40) goToPrevPhoto();
+      isDragging = false;
+    }, { passive: true });
+
+    photoContainer.addEventListener('mousedown', (event) => {
+      touchStartX = event.clientX;
+      isDragging = true;
+    });
+
+    photoContainer.addEventListener('mouseup', (event) => {
+      if (!isDragging) return;
+      const deltaX = event.clientX - touchStartX;
+      if (deltaX < -40) goToNextPhoto();
+      if (deltaX > 40) goToPrevPhoto();
+      isDragging = false;
+    });
+
+    function toggleSession() {
+      const button = document.getElementById('sessionButton');
+      const isLoggedIn = localStorage.getItem('mydogcrushLoggedIn') === 'true';
+
+      if (isLoggedIn) {
+        localStorage.removeItem('mydogcrushLoggedIn');
+        window.location.href = 'index.html';
+      } else {
+        window.location.href = 'login.html';
+      }
+    }
+
+    function updateSessionButton() {
+      const button = document.getElementById('sessionButton');
+      const isLoggedIn = localStorage.getItem('mydogcrushLoggedIn') === 'true';
+      button.textContent = isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión';
+    }
+
+    async function loadProfiles() {
+      profiles = [];
+      showProfile(0);
+      localStorage.removeItem('mydogcrushProfiles');
+
+      try {
+        const res = await fetch(`${API_BASE}/profiles`);
+        const data = await res.json();
+        if (data.success) {
+          profiles = mergeProfiles(data.profiles || []);
+        } else {
+          profiles = [];
+        }
+      } catch (e) {
+        console.error('No se pudieron cargar perfiles', e);
+        profiles = [];
+      }
+
+      if (profiles.length === 0) {
+        showProfile(0);
+      } else {
+        current = 0;
+        showProfile(0);
+      }
+    }
+
+    window.addEventListener('load', async () => {
+      updateSessionButton();
+      await checkPendingMatches();
+      loadProfiles();
+      attachMatchVideoEnded();
+      setInterval(checkPendingMatches, 10000);
+    });
+  </script>
+</body>
+</html>

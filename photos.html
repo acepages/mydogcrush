@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyDogCrush - Fotos</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('fondo.png') center/cover no-repeat;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    h1 { margin: 0 0 8px; text-align: center; color: #333; }
+    p { margin: 0 0 16px; text-align: center; color: #666; font-size: 14px; }
+    .upload-box {
+      border: 1px dashed #d81b60;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      text-align: center;
+      color: #555;
+      background: #fff7fb;
+    }
+    .profile-preview {
+      margin-bottom: 16px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff7fb;
+      border: 1px solid #f3d7e2;
+    }
+    .profile-preview h2 {
+      margin: 0 0 6px;
+      color: #333;
+      font-size: 20px;
+    }
+    .profile-preview p {
+      margin: 4px 0;
+      text-align: left;
+      color: #666;
+      font-size: 14px;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .photo-grid img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #f0d6e2;
+    }
+    .empty-state {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #fff;
+      color: #777;
+      font-size: 13px;
+      text-align: center;
+    }
+    input[type="file"] {
+      margin-top: 8px;
+      width: 100%;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 999px;
+      background: #d81b60;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .link { display: block; margin-top: 12px; text-align: center; color: #d81b60; text-decoration: none; font-size: 14px; }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #f0d6e2;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #666;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff3f8;
+      color: #d81b60;
+      font-size: 18px;
+    }
+    .nav-item.active {
+      color: #d81b60;
+      font-weight: bold;
+    }
+    .nav-item.active .nav-icon {
+      background: #d81b60;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Sube fotos de tu perro</h1>
+    <p>Necesitamos una foto tuya con tu perro y dos fotos del perro solo.</p>
+
+    <div id="profilePreview" class="profile-preview"></div>
+
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input type="text" id="ownerName" placeholder="Tu nombre" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e5c6d3;" />
+      <input type="text" id="dogName" placeholder="Nombre del perro" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e5c6d3;" />
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input type="number" id="age" min="0" max="20" placeholder="Edad" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e5c6d3;" />
+    </div>
+
+    <textarea id="bio" placeholder="Breve descripción del perro" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e5c6d3;margin-bottom:12px;"></textarea>
+
+    <div class="upload-box">
+      <strong>Foto del dueño con su perro</strong>
+      <input id="ownerPhoto" name="ownerPhoto" type="file" accept="image/*" />
+    </div>
+
+    <div class="upload-box">
+      <strong>Foto 1 del perro solo</strong>
+      <input id="dogPhoto1" name="dogPhoto1" type="file" accept="image/*" />
+    </div>
+
+    <div class="upload-box">
+      <strong>Foto 2 del perro solo</strong>
+      <input id="dogPhoto2" name="dogPhoto2" type="file" accept="image/*" />
+    </div>
+
+    <button type="button" id="submitProfile">Subir perfil y continuar</button>
+    <a class="link" href="verify.html">Volver</a>
+
+    <div class="bottom-nav">
+      <a class="nav-item active" href="photos.html">
+        <div class="nav-icon">👤</div>
+        <span>Perfil</span>
+      </a>
+      <a class="nav-item" href="chats.html">
+        <div class="nav-icon">💌</div>
+        <span>Chats</span>
+      </a>
+      <a class="nav-item" href="main.html">
+        <div class="nav-icon">💬</div>
+        <span>Ver perfiles</span>
+      </a>
+      <a class="nav-item" href="donate.html">
+        <div class="nav-icon">❤️</div>
+        <span>Donar</span>
+      </a>
+      <a class="nav-item" href="account.html">
+        <div class="nav-icon">⚙️</div>
+        <span>Cuenta</span>
+      </a>
+    </div>
+  </div>
+  <script>
+    const API_BASE = 'http://localhost:3000';
+
+    function loadProfilesFromStorage() {
+      try {
+        return JSON.parse(localStorage.getItem('mydogcrushProfiles') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveProfilesToStorage(profile) {
+      const profiles = loadProfilesFromStorage();
+      profiles.unshift(profile);
+      localStorage.setItem('mydogcrushProfiles', JSON.stringify(profiles));
+    }
+
+    function getImageUrl(photoPath) {
+      if (!photoPath) return 'dogcrush.png';
+      if (photoPath.startsWith('data:') || photoPath.startsWith('http://') || photoPath.startsWith('https://')) return photoPath;
+      return `${API_BASE}${photoPath}`;
+    }
+
+    async function renderProfilePreview() {
+      const preview = document.getElementById('profilePreview');
+      let profile = null;
+
+      const localProfiles = loadProfilesFromStorage();
+      if (localProfiles.length) {
+        profile = localProfiles[0];
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/profiles`);
+        const data = await res.json();
+        if (data.success && data.profiles && data.profiles.length) {
+          profile = data.profiles[0];
+        }
+      } catch (err) {
+        console.error('No se pudo cargar el perfil', err);
+      }
+
+      if (!profile) {
+        preview.innerHTML = '<div class="empty-state">Aún no tienes un perfil guardado. Completa los datos y sube fotos para verlo aquí.</div>';
+        return;
+      }
+
+      const photos = (profile.photos || []).filter(Boolean);
+      const photoMarkup = photos.length
+        ? `<div class="photo-grid">${photos.map(photo => `<img src="${getImageUrl(photo)}" alt="foto de perfil" />`).join('')}</div>`
+        : '<div class="empty-state">Todavía no hay fotos guardadas.</div>';
+
+      preview.innerHTML = `
+        <h2>${profile.dogName || 'Sin nombre'}</h2>
+        <p><strong>Dueño:</strong> ${profile.ownerName || 'Sin nombre'}</p>
+        <p><strong>Edad:</strong> ${profile.age || 'Sin edad'}</p>
+        <p><strong>Descripción:</strong> ${profile.bio || 'Sin descripción.'}</p>
+        ${photoMarkup}
+      `;
+    }
+
+    document.getElementById('submitProfile').addEventListener('click', async () => {
+      const ownerName = document.getElementById('ownerName').value.trim();
+      const dogName = document.getElementById('dogName').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const bio = document.getElementById('bio').value.trim();
+      if (!ownerName || !dogName) {
+        alert('Por favor completa tu nombre y el nombre del perro.');
+        return;
+      }
+
+      const form = new FormData();
+      form.append('ownerName', ownerName);
+      form.append('dogName', dogName);
+      form.append('age', age);
+      form.append('bio', bio);
+
+      const ownerFile = document.getElementById('ownerPhoto').files[0];
+      const d1 = document.getElementById('dogPhoto1').files[0];
+      const d2 = document.getElementById('dogPhoto2').files[0];
+      if (ownerFile) form.append('ownerPhoto', ownerFile);
+      if (d1) form.append('dogPhoto1', d1);
+      if (d2) form.append('dogPhoto2', d2);
+
+      try {
+        const res = await fetch(`${API_BASE}/profiles`, { method: 'POST', body: form });
+        const data = await res.json();
+        if (data.success) {
+          saveProfilesToStorage(data.profile || { ownerName, dogName, age, bio, photos: [] });
+          localStorage.setItem('mydogcrushProfileCreated', 'true');
+          await renderProfilePreview();
+          alert('Perfil guardado correctamente.');
+        } else {
+          alert(data.message || 'Error al crear perfil');
+        }
+      } catch (err) {
+        console.error(err);
+        saveProfilesToStorage({ ownerName, dogName, age, bio, photos: [] });
+        localStorage.setItem('mydogcrushProfileCreated', 'true');
+        await renderProfilePreview();
+        alert('Perfil guardado localmente.');
+      }
+    });
+
+    window.addEventListener('load', renderProfilePreview);
+  </script>
+</body>
+</html>

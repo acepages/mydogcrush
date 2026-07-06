@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TinderDog</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: url('fondo.png') center/cover no-repeat;
+    }
+    .phone {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    .welcome {
+      padding: 32px 24px 20px;
+      text-align: center;
+      color: #333;
+      position: relative;
+      overflow: hidden;
+      background: transparent;
+    }
+    .welcome::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('fondo.png') center/cover no-repeat;
+      opacity: 0.95;
+      z-index: 0;
+      transform: scale(1.03);
+    }
+    .welcome::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.34));
+      z-index: 0;
+    }
+    .welcome > * {
+      position: relative;
+      z-index: 1;
+    }
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .start-button {
+      display: inline-block;
+      appearance: none;
+      -webkit-appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #ffffff;
+      background: #d81b60;
+      background-color: #d81b60;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.14);
+      outline: none;
+      cursor: pointer;
+      -webkit-text-fill-color: #ffffff;
+    }
+    .secondary-button {
+      background: #ffffff;
+      color: #d81b60;
+      border: 1px solid #d81b60;
+      background-color: #ffffff;
+      -webkit-text-fill-color: #d81b60;
+    }
+    .start-button:hover,
+    .start-button:focus,
+    .start-button:active {
+      color: #ffffff;
+      background: #d81b60;
+      background-color: #d81b60;
+      outline: none;
+      text-decoration: none;
+      -webkit-text-fill-color: #ffffff;
+    }
+    .welcome h1 { margin: 0 0 8px; font-size: 30px; }
+    .welcome p { margin: 0; font-size: 16px; line-height: 1.4; opacity: 0.95; }
+    .icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.25);
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+      font-weight: bold;
+    }
+    .hero-image {
+      width: 100%;
+      max-width: 260px;
+      margin: 10px auto 16px;
+      display: block;
+      border-radius: 24px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+    }
+    .content {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="welcome">
+      <img class="hero-image" src="dogcrush.png" alt="Perro de MyDogCrush" />
+      <p>Encuentra mascotas adorables cerca de ti y empieza a conectar con sus dueños.</p>
+      <div class="button-group">
+        <button class="start-button" type="button" onclick="window.location.href='form.html'">Registrarse</button>
+        <button class="start-button secondary-button" type="button" onclick="window.location.href='login.html'">Iniciar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goToMain() {
+      window.location.href = 'main.html';
+    }
+  </script>
+</body>
+</html>

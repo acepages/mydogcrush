@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "ownerName": "Ana",
+    "dogName": "Milo",
+    "email": "ana@example.com",
+    "age": "3",
+    "bio": "Un perro juguetón y cariñoso.",
+    "photos": [],
+    "likes": [
+      "luis@example.com"
+    ],
+    "likedBy": [
+      "luis@example.com"
+    ],
+    "matches": [
+      "luis@example.com"
+    ],
+    "isDemo": false,
+    "pendingMatches": [
+      "2"
+    ]
+  },
+  {
+    "id": 2,
+    "ownerName": "Luis",
+    "dogName": "Luna",
+    "email": "luis@example.com",
+    "age": "2",
+    "bio": "Le encanta correr en el parque.",
+    "photos": [],
+    "likes": [
+      "ana@example.com"
+    ],
+    "likedBy": [
+      "ana@example.com"
+    ],
+    "matches": [
+      "ana@example.com"
+    ],
+    "isDemo": false,
+    "pendingMatches": [
+      "1"
+    ]
+  }
+]

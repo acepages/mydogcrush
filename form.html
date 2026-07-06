@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyDogCrush - Registro</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('fondo.png') center/cover no-repeat;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+    }
+    p {
+      margin: 0 0 18px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+      color: #444;
+    }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 999px;
+      background: #d81b60;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .back-link {
+      display: block;
+      margin-top: 12px;
+      text-align: center;
+      color: #d81b60;
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Registro de tu perro</h1>
+    <p>Completa los datos para continuar</p>
+
+    <label for="petName">Nombre del perro</label>
+    <input id="petName" type="text" placeholder="Ej. Milo" />
+
+    <label for="petBreed">Raza del perro</label>
+    <select id="petBreed" style="width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:12px; font-size:15px; background:white;">
+      <option value="">Selecciona una raza</option>
+      <option value="Labrador Retriever">Labrador Retriever</option>
+      <option value="Golden Retriever">Golden Retriever</option>
+      <option value="Pastor Alemán">Pastor Alemán</option>
+      <option value="Bulldog Francés">Bulldog Francés</option>
+      <option value="Beagle">Beagle</option>
+      <option value="Caniche">Caniche</option>
+      <option value="Dachshund (Salchicha)">Dachshund (Salchicha)</option>
+      <option value="Chihuahua">Chihuahua</option>
+      <option value="Yorkshire Terrier">Yorkshire Terrier</option>
+      <option value="Boxer">Boxer</option>
+      <option value="Doberman">Doberman</option>
+      <option value="Shih Tzu">Shih Tzu</option>
+      <option value="Maltés">Maltés</option>
+      <option value="Bulldog Francés">Bulldog Francés</option>
+      <option value="Pug">Pug</option>
+      <option value="Bulldog Inglés">Bulldog Inglés</option>
+      <option value="Husky Siberiano">Husky Siberiano</option>
+      <option value="Border Collie">Border Collie</option>
+      <option value="Cocker Spaniel">Cocker Spaniel</option>
+      <option value="Bichón Frisé">Bichón Frisé</option>
+      <option value="Pinscher">Pinscher</option>
+      <option value="Cane Corso">Cane Corso</option>
+      <option value="Samoyedo">Samoyedo</option>
+      <option value="Malamute de Alaska">Malamute de Alaska</option>
+      <option value="Perro de Montaña de Berna">Perro de Montaña de Berna</option>
+      <option value="Rottweiler">Rottweiler</option>
+      <option value="Gran Danés">Gran Danés</option>
+      <option value="Weimaraner">Weimaraner</option>
+      <option value="Pointer de Pelo Corto Alemán">Pointer de Pelo Corto Alemán</option>
+      <option value="Pastor Australiano">Pastor Australiano</option>
+      <option value="Cavalier King Charles Spaniel">Cavalier King Charles Spaniel</option>
+      <option value="Mastín Napolitano">Mastín Napolitano</option>
+      <option value="Basset Hound">Basset Hound</option>
+      <option value="Bulmastiff">Bulmastiff</option>
+      <option value="Pomerania">Pomerania</option>
+      <option value="Caniche Toy">Caniche Toy</option>
+      <option value="Schnauzer">Schnauzer</option>
+      <option value="Terrier Jack Russell">Terrier Jack Russell</option>
+      <option value="Fox Terrier">Fox Terrier</option>
+      <option value="Staffordshire Bull Terrier">Staffordshire Bull Terrier</option>
+      <option value="Dogo Argentino">Dogo Argentino</option>
+      <option value="Dálmata">Dálmata</option>
+      <option value="Pekinés">Pekinés</option>
+      <option value="Shar Pei">Shar Pei</option>
+      <option value="Setter">Setter</option>
+      <option value="Galgo">Galgo</option>
+      <option value="Whippet">Whippet</option>
+      <option value="Lhasa Apso">Lhasa Apso</option>
+      <option value="Corgi">Corgi</option>
+      <option value="Cruza">Cruza</option>
+    </select>
+
+    <label for="ownerName">Nombre del dueño</label>
+    <input id="ownerName" type="text" placeholder="Ej. Ana Gómez" />
+
+    <label for="email">Correo del dueño</label>
+    <input id="email" type="email" placeholder="Ej. ana@email.com" />
+
+    <label for="phone">Número de teléfono</label>
+    <input id="phone" type="tel" placeholder="Ej. 555-1234" />
+
+    <button type="button" onclick="goToVerify()">Guardar</button>
+    <a class="back-link" href="index.html">Volver</a>
+  </div>
+
+  <script>
+    function goToVerify() {
+      const rawEmail = document.getElementById('email').value.trim();
+      const email = rawEmail.toLowerCase();
+
+      if (!email) {
+        alert('Por favor ingresa un correo válido.');
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('mydogcrushUsers') || '{}');
+      users[email] = { email, password: '' };
+      localStorage.setItem('mydogcrushUsers', JSON.stringify(users));
+      localStorage.setItem('mydogcrushPendingEmail', email);
+
+      window.location.href = 'verify.html?email=' + encodeURIComponent(email);
+    }
+  </script>
+</body>
+</html>

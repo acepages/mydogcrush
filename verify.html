@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyDogCrush - Verificación</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('fondo.png') center/cover no-repeat;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    h1 { margin: 0 0 8px; text-align: center; color: #333; }
+    p { margin: 0 0 16px; text-align: center; color: #666; }
+    .status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+    }
+    .status.error {
+      color: #c2185b;
+    }
+    label { display: block; margin: 12px 0 6px; font-weight: bold; color: #444; }
+    input { width: 100%; padding: 12px 14px; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; }
+    button { width: 100%; margin-top: 18px; padding: 12px 16px; border: none; border-radius: 999px; background: #d81b60; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .link { display: block; margin-top: 12px; text-align: center; color: #d81b60; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Verifica tu contacto</h1>
+    <p>Ingresa el código que recibirás por correo para continuar.</p>
+
+    <div id="status" class="status">Se enviará un código a tu correo si la configuración SMTP está lista.</div>
+
+    <label for="code">Ingresa el código</label>
+    <input id="code" type="text" placeholder="Ej. 482913" />
+
+    <button type="button" onclick="window.location.href='photos.html'">Verificar</button>
+    <a class="link" href="form.html">Volver</a>
+  </div>
+
+  <script>
+    function getEmailFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('email') || '';
+    }
+
+    async function sendVerificationCode() {
+      const email = getEmailFromUrl();
+      if (!email) return;
+
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      const input = document.getElementById('code');
+      const status = document.getElementById('status');
+      input.placeholder = 'Ingresa el código recibido por correo';
+      input.value = '';
+      status.textContent = 'Enviando código...';
+      status.className = 'status';
+
+      try {
+        const response = await fetch('http://localhost:3000/send-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, code })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.message || 'No se pudo enviar el correo');
+        }
+
+        if (data.fallback) {
+          status.textContent = 'No se pudo enviar el correo. Revisa tu configuración SMTP o intenta nuevamente.';
+          status.className = 'status error';
+        } else {
+          status.textContent = 'Código enviado. Revisa tu bandeja de entrada.';
+        }
+      } catch (error) {
+        console.error('No se pudo enviar el correo:', error);
+        status.textContent = 'No se pudo enviar el correo. Revisa tu configuración SMTP o intenta nuevamente.';
+        status.className = 'status error';
+      }
+    }
+
+    window.addEventListener('load', sendVerificationCode);
+  </script>
+</body>
+</html>

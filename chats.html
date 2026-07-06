@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyDogCrush - Chats</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fff7f2, #ffe7db);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .phone {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    }
+    .header {
+      padding: 18px 20px 8px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 22px;
+      color: #ff6b6b;
+      position: relative;
+    }
+    .session-button {
+      position: absolute;
+      top: 18px;
+      right: 16px;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #ff6b6b;
+      color: white;
+    }
+    .content {
+      padding: 20px;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .content h1 {
+      font-size: 28px;
+      color: #ff6b6b;
+      margin: 0 0 10px;
+    }
+    .content p {
+      font-size: 16px;
+      color: #666;
+      margin: 0;
+    }
+    .chat-list {
+      width: 100%;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+    .chat-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #f5e0db;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .chat-detail {
+      width: 100%;
+      margin-top: 20px;
+      background: #fff7f2;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: inset 0 0 0 1px rgba(255,107,107,0.1);
+      display: none;
+      flex-direction: column;
+      max-height: 360px;
+    }
+    .chat-detail.open {
+      display: flex;
+    }
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .chat-header h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #ff6b6b;
+    }
+    .chat-header button {
+      border: none;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .message-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .message-item {
+      align-self: flex-start;
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      font-size: 14px;
+      color: #333;
+    }
+    .message-item.from-me {
+      align-self: flex-end;
+      background: #dff8e8;
+    }
+    .message-input-area {
+      display: flex;
+      gap: 10px;
+    }
+    .message-input {
+      flex: 1;
+      padding: 12px 14px;
+      border: 1px solid #f5e0db;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+    .send-button {
+      border: none;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .chat-item:hover {
+      background: #f9f9f9;
+    }
+    .chat-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b6b, #ffb26b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-right: 12px;
+    }
+    .chat-info {
+      flex: 1;
+      text-align: left;
+    }
+    .chat-info h3 {
+      margin: 0 0 4px;
+      font-size: 14px;
+      color: #333;
+    }
+    .chat-info p {
+      margin: 0;
+      font-size: 12px;
+      color: #999;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 12px 16px;
+      border-top: 1px solid #f5e0db;
+      background: white;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #8a6c6c;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff3f2;
+      color: #ff6b6b;
+      font-size: 18px;
+    }
+    .nav-item.active {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+    .nav-item.active .nav-icon {
+      background: #ff6b6b;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="header">
+      MyDogCrush
+      <button class="session-button" id="sessionButton" onclick="toggleSession()">Iniciar sesión</button>
+    </div>
+
+    <div class="content">
+      <h1>💌 Tus chats</h1>
+      <div class="chat-list" id="chatList">
+        <div style="color: #999; padding: 40px 20px;">
+          Aún no tienes chats. ¡Dale "Me gusta" a un perfil para comenzar!
+        </div>
+      </div>
+      <div class="chat-detail" id="chatDetail">
+        <div class="chat-header">
+          <h2 id="chatTitle">Chat</h2>
+          <button type="button" onclick="closeChatDetail()">Cerrar</button>
+        </div>
+        <div class="message-list" id="messageList"></div>
+        <div class="message-input-area">
+          <input id="messageInput" class="message-input" type="text" placeholder="Escribe un mensaje..." />
+          <button class="send-button" onclick="sendMessage()">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <a class="nav-item" href="photos.html">
+        <div class="nav-icon">👤</div>
+        <span>Perfil</span>
+      </a>
+      <a class="nav-item active" href="chats.html">
+        <div class="nav-icon">💌</div>
+        <span>Chats</span>
+      </a>
+      <a class="nav-item" href="main.html">
+        <div class="nav-icon">💬</div>
+        <span>Ver perfiles</span>
+      </a>
+      <a class="nav-item" href="donate.html">
+        <div class="nav-icon">❤️</div>
+        <span>Donar</span>
+      </a>
+      <a class="nav-item" href="account.html">
+        <div class="nav-icon">⚙️</div>
+        <span>Cuenta</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function toggleSession() {
+      const button = document.getElementById('sessionButton');
+      const isLoggedIn = localStorage.getItem('mydogcrushLoggedIn') === 'true';
+
+      if (isLoggedIn) {
+        localStorage.removeItem('mydogcrushLoggedIn');
+        window.location.href = 'index.html';
+      } else {
+        window.location.href = 'login.html';
+      }
+    }
+
+    function updateSessionButton() {
+      const button = document.getElementById('sessionButton');
+      const isLoggedIn = localStorage.getItem('mydogcrushLoggedIn') === 'true';
+      button.textContent = isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión';
+    }
+
+    function loadChats() {
+      const chatList = document.getElementById('chatList');
+      const chats = JSON.parse(localStorage.getItem('mydogcrushChats') || '[]');
+      if (!chats.length) {
+        chatList.innerHTML = '<div style="color: #999; padding: 40px 20px;">Aún no tienes chats. ¡Dale "Me gusta" a un perfil para comenzar!</div>';
+        return;
+      }
+      chatList.innerHTML = chats.map(chat => `
+        <div class="chat-item" onclick="openChat('${chat.id}')">
+          <div class="chat-avatar">${chat.dogName ? chat.dogName.charAt(0).toUpperCase() : 'C'}</div>
+          <div class="chat-info">
+            <h3>${chat.dogName || chat.ownerName || 'Sin nombre'}</h3>
+            <p>${chat.lastMessage || 'Empieza la conversación'}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getChatById(chatId) {
+      const chats = JSON.parse(localStorage.getItem('mydogcrushChats') || '[]');
+      return chats.find(chat => String(chat.id) === String(chatId));
+    }
+
+    function openChat(chatId) {
+      const chat = getChatById(chatId);
+      if (!chat) return;
+      const detail = document.getElementById('chatDetail');
+      const title = document.getElementById('chatTitle');
+      const messageList = document.getElementById('messageList');
+      detail.classList.add('open');
+      title.textContent = chat.dogName ? `${chat.dogName} • ${chat.ownerName}` : chat.ownerName || 'Chat';
+      messageList.innerHTML = (chat.messages || []).map(message => `
+        <div class="message-item ${message.fromMe ? 'from-me' : ''}">${message.text}</div>
+      `).join('') || '<div style="color:#999; font-size:14px;">No hay mensajes aún.</div>';
+      messageList.scrollTop = messageList.scrollHeight;
+      localStorage.setItem('mydogcrushPendingChatId', String(chatId));
+      const url = new URL(window.location.href);
+      url.searchParams.set('chatId', String(chatId));
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    function closeChatDetail() {
+      const detail = document.getElementById('chatDetail');
+      detail.classList.remove('open');
+      const url = new URL(window.location.href);
+      url.searchParams.delete('chatId');
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const chatId = localStorage.getItem('mydogcrushPendingChatId');
+      if (!chatId) return;
+      const chats = JSON.parse(localStorage.getItem('mydogcrushChats') || '[]');
+      const chat = chats.find(c => String(c.id) === String(chatId));
+      if (!chat) return;
+      const message = { fromMe: true, text, timestamp: Date.now() };
+      chat.messages = chat.messages || [];
+      chat.messages.push(message);
+      chat.lastMessage = text;
+      chat.timestamp = Date.now();
+      localStorage.setItem('mydogcrushChats', JSON.stringify(chats));
+      input.value = '';
+      openChat(chatId);
+    }
+
+    function initChatFromQuery() {
+      const url = new URL(window.location.href);
+      const chatId = url.searchParams.get('chatId') || localStorage.getItem('mydogcrushPendingChatId');
+      if (chatId) {
+        openChat(chatId);
+      }
+    }
+
+    window.addEventListener('load', () => {
+      updateSessionButton();
+      loadChats();
+      initChatFromQuery();
+    });
+  </script>
+</body>
+</html>
