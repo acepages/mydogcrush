@@ -53,6 +53,7 @@
     <a class="link" href="index.html">Volver</a>
   </div>
 
+  <script src="auth.js"></script>
   <script>
     let pendingEmail = '';
     let pendingCode = '';
@@ -72,10 +73,9 @@
     }
 
     function login() {
-      const email = document.getElementById('email').value.trim().toLowerCase();
+      const email = window.Auth.normalizeEmail(document.getElementById('email').value);
       const password = document.getElementById('password').value;
-      const users = JSON.parse(localStorage.getItem('mydogcrushUsers') || '{}');
-      const user = users[email];
+      const user = window.Auth.getUser(email);
 
       if (!user) {
         alert('No existe una cuenta con ese correo.');
@@ -93,8 +93,7 @@
 
       if (!requiresVerification) {
         // Login directo sin código
-        localStorage.setItem('mydogcrushLoggedIn', 'true');
-        localStorage.setItem('mydogcrushUserEmail', email);
+        window.Auth.setLoggedIn(email);
         window.location.href = 'main.html';
         return;
       }
@@ -108,7 +107,11 @@
       document.getElementById('loginButton').classList.add('hidden');
       document.getElementById('codeSection').classList.remove('hidden');
 
-      fetch('http://localhost:3000/send-code', {
+      const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000'
+        : 'https://mydogcrush.onrender.com';
+
+      fetch(`${apiBase}/send-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code: pendingCode })
@@ -132,8 +135,7 @@
     function verifyCode() {
       const enteredCode = document.getElementById('code').value.trim();
       if (enteredCode === pendingCode) {
-        localStorage.setItem('mydogcrushLoggedIn', 'true');
-        localStorage.setItem('mydogcrushUserEmail', pendingEmail);
+        window.Auth.setLoggedIn(pendingEmail);
         window.location.href = 'main.html';
       } else {
         alert('El código ingresado es incorrecto.');

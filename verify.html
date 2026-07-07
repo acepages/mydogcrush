@@ -51,7 +51,7 @@
     <label for="code">Ingresa el código</label>
     <input id="code" type="text" placeholder="Ej. 482913" />
 
-    <button type="button" onclick="window.location.href='photos.html'">Verificar</button>
+    <button id="verifyButton" type="button">Verificar</button>
     <a class="link" href="form.html">Volver</a>
   </div>
 
@@ -59,6 +59,32 @@
     function getEmailFromUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('email') || '';
+    }
+
+    function storeVerificationCode(code, email) {
+      localStorage.setItem('mydogcrushVerificationCode', code);
+      localStorage.setItem('mydogcrushVerificationEmail', email);
+    }
+
+    function getStoredVerificationCode() {
+      return localStorage.getItem('mydogcrushVerificationCode') || '';
+    }
+
+    function verifyCode() {
+      const enteredCode = document.getElementById('code').value.trim();
+      const expectedCode = getStoredVerificationCode();
+
+      if (!enteredCode) {
+        alert('Ingresa el código recibido por correo.');
+        return;
+      }
+
+      if (enteredCode === expectedCode) {
+        window.location.href = 'photos.html';
+        return;
+      }
+
+      alert('El código ingresado no coincide. Revisa tu correo e intenta nuevamente.');
     }
 
     async function sendVerificationCode() {
@@ -74,7 +100,11 @@
       status.className = 'status';
 
       try {
-        const response = await fetch('http://localhost:3000/send-code', {
+        const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? 'http://localhost:3000'
+          : 'https://mydogcrush.onrender.com';
+
+        const response = await fetch(`${apiBase}/send-code`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, code })
@@ -84,6 +114,8 @@
         if (!response.ok) {
           throw new Error(data.message || 'No se pudo enviar el correo');
         }
+
+        storeVerificationCode(code, email);
 
         if (data.fallback) {
           status.textContent = 'No se pudo enviar el correo. Revisa tu configuración SMTP o intenta nuevamente.';
@@ -98,6 +130,7 @@
       }
     }
 
+    document.getElementById('verifyButton').addEventListener('click', verifyCode);
     window.addEventListener('load', sendVerificationCode);
   </script>
 </body>

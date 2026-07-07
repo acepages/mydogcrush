@@ -147,20 +147,19 @@
     <a class="back-link" href="index.html">Volver</a>
   </div>
 
+  <script src="auth.js"></script>
   <script>
     function goToVerify() {
       const rawEmail = document.getElementById('email').value.trim();
-      const email = rawEmail.toLowerCase();
+      const email = window.Auth.normalizeEmail(rawEmail);
 
       if (!email) {
         alert('Por favor ingresa un correo válido.');
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem('mydogcrushUsers') || '{}');
-      users[email] = { email, password: '' };
-      localStorage.setItem('mydogcrushUsers', JSON.stringify(users));
-      localStorage.setItem('mydogcrushPendingEmail', email);
+      window.Auth.registerUser(email, { password: '' });
+      window.Auth.setPendingEmail(email);
 
       window.location.href = 'verify.html?email=' + encodeURIComponent(email);
     }
